@@ -1,250 +1,322 @@
-<!DOCTYPE html>  <html lang="en">  
-<head>  
-<meta charset="UTF-8">  
-<title>NIRIB HACKR</title>  <style>  
-body{  
-  margin:0;  
-  padding:14px;  
-  font-family:Segoe UI,Arial;  
-  background:radial-gradient(circle at top,#001b3a,#000814);  
-  color:#cfe9ff;  
-}  
-h2{  
-  text-align:center;  
-  color:#4fc3ff;  
-  text-shadow:0 0 10px #00b0ff;  
-  cursor:pointer;  
-}  
-.textview{  
-  background:#001f3f;  
-  border:1px solid #00b0ff;  
-  border-radius:10px;  
-  padding:14px;  
-  margin-top:14px;  
-}  
-.copy{  
-  width:100%;  
-  background:linear-gradient(135deg,#003cff,#00b0ff);  
-  border:none;  
-  color:#fff;  
-  padding:10px;  
-  border-radius:8px;  
-  margin-top:6px;  
-  font-weight:bold;  
-}  
-.toast{  
-  position:fixed;  
-  bottom:20px;  
-  left:50%;  
-  transform:translateX(-50%);  
-  background:#003cff;  
-  padding:10px 18px;  
-  border-radius:20px;  
-  display:none;  
-}  
-  
-/* TELEGRAM FLOAT */  
-.tg-float{  
-  position:fixed;  
-  bottom:20px;  
-  right:20px;  
-  background:linear-gradient(135deg,#0088cc,#00b0ff);  
-  color:#fff;  
-  padding:12px 16px;  
-  border-radius:50px;  
-  font-weight:bold;  
-  text-decoration:none;  
-  display:flex;  
-  align-items:center;  
-  gap:8px;  
-  box-shadow:0 0 15px rgba(0,136,204,.6);  
-}  
-.tg-float img{  
-  width:20px;  
-  height:20px;  
-}  
-  
-/* POPUP */  
-#popup{  
-  position:fixed;  
-  inset:0;  
-  background:rgba(0,0,0,.7);  
-  display:none;  
-  align-items:center;  
-  justify-content:center;  
-  z-index:999;  
-}  
-#popup div{  
-  background:#001f3f;  
-  padding:20px;  
-  border-radius:12px;  
-  text-align:center;  
-}  
-#popup a{  
-  display:flex;  
-  align-items:center;  
-  justify-content:center;  
-  gap:8px;  
-  color:#4fc3ff;  
-  text-decoration:none;  
-  font-weight:bold;  
-}  
-#popup img{width:22px}  
-#popup button{  
-  margin-top:10px;  
-  padding:8px 14px;  
-  border:none;  
-  border-radius:8px;  
-  background:#00b0ff;  
-  color:#fff;  
-  font-weight:bold;  
-}  
-  
-/* ADMIN */  
-#admin{  
-  display:none;  
-  position:fixed;  
-  inset:0;  
-  background:#000c1f;  
-  padding:16px;  
-  overflow:auto;  
-}  
-textarea,input{  
-  width:100%;  
-  border-radius:8px;  
-  padding:10px;  
-  margin-top:6px;  
-}  
-.btn{  
-  background:#00b0ff;  
-  border:none;  
-  padding:8px 12px;  
-  border-radius:8px;  
-  margin:6px 3px;  
-  font-weight:bold;  
-}  
-.item{  
-  background:#001f3f;  
-  padding:10px;  
-  border-radius:8px;  
-  margin-top:8px;  
-}  
-</style>  </head>  <body>  <h2 id="title">😈 NIRIB HACKR 😈</h2>  
-<div id="container"></div>  
-<div class="toast" id="toast">✅ Copied</div>  <a class="tg-float" id="tgBtn" target="_blank">  
-  <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">  
-  Telegram  
-</a>  <!-- TELEGRAM POPUP -->  <div id="popup">  
-  <div>  
-    <h3>🚀 Join Our Telegram</h3>  
-    <a id="tgPopup" target="_blank">  
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">  
-      Join Telegram  
-    </a>  
-    <br>  
-    <button onclick="closePopup()">Close</button>  
-  </div>  
-</div>  <!-- ADMIN PANEL -->  <div id="admin">  
-  <h3>🛠 Admin Panel</h3>  <label>🔗 Telegram Link</label>
-<input id="tgInput" placeholder="https://t.me/yourchannel">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NIRIB HACKR</title>
 
-  <textarea id="newText" placeholder="Add new text"></textarea>  <button class="btn" onclick="saveTelegram()">💾 Save Telegram</button>
-<button class="btn" onclick="addText()">➕ Add Text</button>
+<style>
+body{
+  margin:0;
+  padding:14px;
+  font-family:Segoe UI,Arial;
+  background:radial-gradient(circle at top,#001b3a,#000814);
+  color:#cfe9ff;
+  font-size:18px;
+  line-height:1.7;
+}
 
-  <div id="list"></div>  
-  <button class="btn" onclick="closeAdmin()">❌ Close</button>  
-</div>  <script>  
-/* TELEGRAM LINK */  
-let tgLink = localStorage.getItem("tgLink") || "https://t.me/producermaruf";  
-const tgBtn=document.getElementById("tgBtn");  
-const tgPopup=document.getElementById("tgPopup");  
-const tgInput=document.getElementById("tgInput");  
-  
-function updateTG(){  
-  tgBtn.href=tgLink;  
-  tgPopup.href=tgLink;  
-  tgInput.value=tgLink;  
-}  
-updateTG();  
-  
-/* POPUP */  
-if(!localStorage.getItem("tgShown")){  
-  popup.style.display="flex";  
-}  
-function closePopup(){  
-  localStorage.setItem("tgShown","1");  
-  popup.style.display="none";  
-}  
-  
-/* DATA */  
-const ADMIN_PASSWORD="Nirob";  
-let tries=0;  
-const defaultTexts=["⚠️ Abusive language detected."];  
-let texts=JSON.parse(localStorage.getItem("texts"))||defaultTexts;  
-localStorage.setItem("texts",JSON.stringify(texts));  
-  
-function render(){  
-  container.innerHTML="";  
-  texts.forEach((t,i)=>{  
-    container.innerHTML+=`  
-      <div class="textview" id="t${i}">${t}</div>  
-      <button class="copy" onclick="copyText('t${i}')">📋 Copy</button>`;  
-  });  
-}  
-render();  
-  
-function copyText(id){  
-  navigator.clipboard.writeText(document.getElementById(id).innerText);  
-  toast.style.display="block";  
-  setTimeout(()=>toast.style.display="none",1200);  
-}  
-  
-/* ADMIN */  
-let tap=0;  
-title.onclick=()=>{  
-  tap++;  
-  if(tap>=5){  
-    tap=0;  
-    if(tries>=3) return alert("🔒 Admin Locked");  
-    const p=prompt("Admin Password");  
-    if(p===ADMIN_PASSWORD){  
-      admin.style.display="block";  
-      renderAdmin();  
-    }else{  
-      tries++; alert("Wrong Password");  
-    }  
-  }  
-};  
-  
-function closeAdmin(){admin.style.display="none";}  
-  
-function saveTelegram(){  
-  tgLink=tgInput.value;  
-  localStorage.setItem("tgLink",tgLink);  
-  updateTG();  
-  alert("✅ Telegram Link Updated");  
-}  
-  
-const list=document.getElementById("list");  
-function renderAdmin(){  
-  list.innerHTML="";  
-  texts.forEach((t,i)=>{  
-    list.innerHTML+=`  
-      <div class="item">${t}<br>  
-      <button class="btn" onclick="delText(${i})">❌ Delete</button></div>`;  
-  });  
-}  
-function addText(){  
-  if(newText.value){  
-    texts.push(newText.value);  
-    save();  
-    newText.value="";  
-  }  
-}  
-function delText(i){texts.splice(i,1);save();}  
-function save(){  
-  localStorage.setItem("texts",JSON.stringify(texts));  
-  render();renderAdmin();  
-}  
-</script>  </body>  
-    </html>
+/* TITLE */
+h2{
+  text-align:center;
+  color:#4fc3ff;
+  text-shadow:0 0 10px #00b0ff;
+  cursor:pointer;
+}
+
+/* TEXT BOX */
+.textview{
+  background:#001f3f;
+  border:1px solid #00b0ff;
+  border-radius:12px;
+  padding:18px;
+  margin-top:16px;
+  font-size:19px;
+  line-height:1.8;
+}
+
+/* COPY BUTTON */
+.copy{
+  width:100%;
+  background:linear-gradient(135deg,#003cff,#00b0ff);
+  border:none;
+  color:#fff;
+  padding:14px;
+  border-radius:10px;
+  margin-top:10px;
+  font-weight:bold;
+  font-size:17px;
+}
+
+/* TOAST */
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#003cff;
+  padding:12px 22px;
+  border-radius:30px;
+  display:none;
+  font-size:16px;
+}
+
+/* TELEGRAM FLOAT */
+.tg-float{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:linear-gradient(135deg,#0088cc,#00b0ff);
+  color:#fff;
+  padding:14px 18px;
+  border-radius:50px;
+  font-weight:bold;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  box-shadow:0 0 18px rgba(0,136,204,.6);
+  font-size:16px;
+}
+.tg-float img{
+  width:22px;
+  height:22px;
+}
+
+/* POPUP */
+#popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+#popup div{
+  background:#001f3f;
+  padding:22px;
+  border-radius:14px;
+  text-align:center;
+}
+#popup h3{
+  margin-top:0;
+  color:#4fc3ff;
+}
+#popup a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:#4fc3ff;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:18px;
+}
+#popup img{width:24px}
+#popup button{
+  margin-top:14px;
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  background:#00b0ff;
+  color:#fff;
+  font-weight:bold;
+  font-size:16px;
+}
+
+/* ADMIN PANEL */
+#admin{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000c1f;
+  padding:18px;
+  overflow:auto;
+  z-index:1000;
+}
+#admin h3{color:#4fc3ff}
+
+textarea,input{
+  width:100%;
+  border-radius:10px;
+  padding:14px;
+  margin-top:8px;
+  font-size:16px;
+}
+
+.btn{
+  background:#00b0ff;
+  border:none;
+  padding:10px 16px;
+  border-radius:10px;
+  margin:8px 4px;
+  font-weight:bold;
+  font-size:15px;
+}
+
+.item{
+  background:#001f3f;
+  padding:14px;
+  border-radius:10px;
+  margin-top:10px;
+  font-size:16px;
+}
+</style>
+</head>
+
+<body>
+
+<h2 id="title">😈 NIRIB HACKR 😈</h2>
+
+<div id="container"></div>
+
+<div class="toast" id="toast">✅ Copied</div>
+
+<a class="tg-float" id="tgBtn" target="_blank">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+  Telegram
+</a>
+
+<!-- TELEGRAM POPUP -->
+<div id="popup">
+  <div>
+    <h3>🚀 Join Our Telegram</h3>
+    <a id="tgPopup" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
+      Join Telegram
+    </a>
+    <br>
+    <button onclick="closePopup()">Close</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin">
+  <h3>🛠 Admin Panel</h3>
+
+  <label>🔗 Telegram Link</label>
+  <input id="tgInput" placeholder="https://t.me/yourchannel">
+
+  <label>➕ Add New Text</label>
+  <textarea id="newText" placeholder="Write text here..."></textarea>
+
+  <button class="btn" onclick="saveTelegram()">💾 Save Telegram</button>
+  <button class="btn" onclick="addText()">➕ Add Text</button>
+
+  <div id="list"></div>
+
+  <button class="btn" onclick="closeAdmin()">❌ Close</button>
+</div>
+
+<script>
+/* TELEGRAM */
+let tgLink = localStorage.getItem("tgLink") || "https://t.me/producermaruf";
+const tgBtn = document.getElementById("tgBtn");
+const tgPopup = document.getElementById("tgPopup");
+const tgInput = document.getElementById("tgInput");
+
+function updateTG(){
+  tgBtn.href = tgLink;
+  tgPopup.href = tgLink;
+  tgInput.value = tgLink;
+}
+updateTG();
+
+/* POPUP */
+if(!localStorage.getItem("tgShown")){
+  popup.style.display="flex";
+}
+function closePopup(){
+  localStorage.setItem("tgShown","1");
+  popup.style.display="none";
+}
+
+/* DATA */
+const ADMIN_PASSWORD = "Nirob";
+let tries = 0;
+let texts = JSON.parse(localStorage.getItem("texts")) || [
+  "⚠️ Abusive language detected.",
+  "❌ Illegal adult links are being shared.",
+  "🔞 18+ content violates community rules.",
+  "⚠️ Please suspend this voice room."
+];
+localStorage.setItem("texts", JSON.stringify(texts));
+
+function render(){
+  container.innerHTML="";
+  texts.forEach((t,i)=>{
+    container.innerHTML += `
+      <div class="textview" id="t${i}">${t}</div>
+      <button class="copy" onclick="copyText('t${i}')">📋 Copy</button>
+    `;
+  });
+}
+render();
+
+function copyText(id){
+  navigator.clipboard.writeText(document.getElementById(id).innerText);
+  toast.style.display="block";
+  setTimeout(()=>toast.style.display="none",1200);
+}
+
+/* ADMIN */
+let tap = 0;
+title.onclick = ()=>{
+  tap++;
+  if(tap >= 5){
+    tap = 0;
+    if(tries >= 3) return alert("🔒 Admin Locked");
+    const p = prompt("Admin Password");
+    if(p === ADMIN_PASSWORD){
+      admin.style.display="block";
+      renderAdmin();
+    }else{
+      tries++;
+      alert("❌ Wrong Password");
+    }
+  }
+};
+
+function closeAdmin(){ admin.style.display="none"; }
+
+function saveTelegram(){
+  tgLink = tgInput.value;
+  localStorage.setItem("tgLink", tgLink);
+  updateTG();
+  alert("✅ Telegram Link Updated");
+}
+
+function renderAdmin(){
+  list.innerHTML="";
+  texts.forEach((t,i)=>{
+    list.innerHTML += `
+      <div class="item">
+        ${t}<br>
+        <button class="btn" onclick="delText(${i})">❌ Delete</button>
+      </div>
+    `;
+  });
+}
+
+function addText(){
+  if(newText.value.trim()){
+    texts.push(newText.value);
+    save();
+    newText.value="";
+  }
+}
+
+function delText(i){
+  texts.splice(i,1);
+  save();
+}
+
+function save(){
+  localStorage.setItem("texts", JSON.stringify(texts));
+  render();
+  renderAdmin();
+}
+</script>
+
+</body>
+</html>
