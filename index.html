@@ -2,221 +2,226 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<!-- 🔴 MOST IMPORTANT FIX -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NIROB HACKR</title>
 
-<title>NIRIB HACKR</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 body{
+  font-family:'Poppins',sans-serif;
+  background:#070b14;
+  color:white;
   margin:0;
-  padding:16px;
-  font-family:Segoe UI,Arial,sans-serif;
-  background:radial-gradient(circle at top,#001b3a,#000814);
-  color:#e6f4ff;
-  font-size:20px;          /* 🔥 BIG BASE FONT */
-  line-height:1.9;
-}
-
-/* TITLE */
-h2{
   text-align:center;
-  color:#4fc3ff;
-  text-shadow:0 0 12px #00b0ff;
-  cursor:pointer;
-  font-size:26px;
 }
-
-/* TEXT BOX */
-.textview{
-  background:#001f3f;
-  border:1px solid #00b0ff;
-  border-radius:14px;
+header{
+  padding:50px 20px;
+  background:#111827;
+  border-bottom:2px solid #6366f1;
+}
+h1{
+  margin:0;
+  color:#818cf8;
+  text-shadow:0 0 15px #6366f1;
+  font-size:30px;
+}
+header p{color:#94a3b8;margin-top:10px;}
+.app-list{
+  padding:30px 15px;
+  max-width:500px;
+  margin:auto;
+}
+.app-card{
+  background:#111827;
+  margin-bottom:40px;
+  padding:25px;
+  border-radius:20px;
+  border:1px solid #1f2937;
+  box-shadow:0 8px 16px rgba(0,0,0,0.3);
+}
+.app-title{
+  font-size:22px;
+  font-weight:bold;
+  margin-bottom:15px;
+  color:#fff;
+}
+.caption-wrapper{
+  position:relative;
+  background:rgba(15,23,42,0.95);
   padding:20px;
-  margin-top:18px;
-  font-size:21px;          /* 🔥 MAIN TEXT BIG */
-  line-height:2;
+  border-radius:15px;
+  margin-bottom:20px;
+  border-left:6px solid #6366f1;
+  text-align:left;
+  max-height:400px;
+  overflow-y:auto;
 }
-
-/* COPY BUTTON */
-.copy{
-  width:100%;
-  background:linear-gradient(135deg,#003cff,#00b0ff);
+.caption-label{
+  position:absolute;
+  top:10px;
+  right:12px;
+  font-size:11px;
+  color:#6366f1;
+  font-weight:bold;
+}
+.app-desc{
+  white-space:pre-wrap;
+  font-size:14px;
+  line-height:1.7;
+}
+.btn-container{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.download-btn{
+  background:linear-gradient(45deg,#6366f1,#a855f7);
   border:none;
-  color:#fff;
-  padding:16px;
+  padding:15px;
   border-radius:12px;
-  margin-top:12px;
   font-weight:bold;
-  font-size:18px;
+  color:white;
+  cursor:pointer;
+}
+.copy-btn{
+  background:transparent;
+  border:2px solid #6366f1;
+  color:#818cf8;
+  padding:14px;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-/* TOAST */
-.toast{
+/* Floating buttons */
+.floating-buttons{
   position:fixed;
-  bottom:22px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#003cff;
-  padding:14px 26px;
-  border-radius:30px;
-  display:none;
-  font-size:18px;
+  right:15px;
+  bottom:50px;
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+  z-index:9999;
 }
-
-/* TELEGRAM FLOAT */
-.tg-float{
-  position:fixed;
-  bottom:22px;
-  right:18px;
-  background:linear-gradient(135deg,#0088cc,#00b0ff);
-  color:#fff;
-  padding:16px 20px;
-  border-radius:50px;
-  font-weight:bold;
-  text-decoration:none;
+.float-btn{
+  width:60px;
+  height:60px;
+  border-radius:50%;
   display:flex;
   align-items:center;
-  gap:10px;
-  box-shadow:0 0 20px rgba(0,136,204,.7);
-  font-size:17px;
+  justify-content:center;
+  text-decoration:none;
+  box-shadow:0 6px 12px rgba(0,0,0,0.4);
 }
-.tg-float img{width:24px}
-
-/* ADMIN PANEL */
-#admin{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#000c1f;
-  padding:18px;
-  overflow:auto;
-  z-index:1000;
+/* Telegram button */
+.float-tg{
+  background:#0088cc;
 }
-
-textarea,input{
-  width:100%;
-  border-radius:12px;
-  padding:16px;
-  margin-top:10px;
-  font-size:18px;
+.float-tg i{
+  color:white;
+  font-size:28px;
 }
-
-.btn{
-  background:#00b0ff;
-  border:none;
-  padding:12px 18px;
-  border-radius:12px;
-  margin:10px 4px;
-  font-weight:bold;
-  font-size:17px;
-}
-
-.item{
-  background:#001f3f;
-  padding:16px;
-  border-radius:12px;
-  margin-top:12px;
-  font-size:18px;
+/* IMO button */
+.float-imo{
+  background:white;
+  color:black;
+  font-weight:900;
+  font-size:16px;
 }
 </style>
 </head>
-
 <body>
 
-<h2 id="title">😈 NIRIB HACKR 😈</h2>
+<header>
+<h1>🌟 NIROB HACKR 🌟</h1>
+<p>Premium Virus Panel</p>
+</header>
 
-<div id="container"></div>
-<div class="toast" id="toast">✅ Copied</div>
+<div class="app-list" id="appGrid"></div>
 
-<a class="tg-float" id="tgBtn" target="_blank">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg">
-  Telegram
-</a>
-
-<div id="admin">
-  <h3>🛠 Admin Panel</h3>
-
-  <input id="tgInput" placeholder="Telegram link">
-  <textarea id="newText" placeholder="Add new text"></textarea>
-
-  <button class="btn" onclick="saveTelegram()">Save Telegram</button>
-  <button class="btn" onclick="addText()">Add Text</button>
-
-  <div id="list"></div 
-  <button class="btn" onclick="closeAdmin()">Close</button>
+<!-- Floating right side buttons -->
+<div class="floating-buttons">
+  <!-- Telegram -->
+  <a href="https://t.me/+9bbmDogfC4hmMjc1" class="float-btn float-tg" target="_blank" title="Telegram">
+    <i class="fa-brands fa-telegram"></i>
+  </a>
+  <!-- IMO -->
+  <a href="https://s.channelcom.tech/M9wq4g?from=copy_link" class="float-btn float-imo" target="_blank" title="IMO">
+    IMO
+  </a>
 </div>
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
-let tgLink=localStorage.getItem("tgLink")||"https://t.me/producermaruf";
-tgBtn.href=tgLink;
+const firebaseConfig={
+  apiKey:"AIzaSyC3KLc2o9rVfvLNxMGR9KlT_TJBPje29Mw",
+  databaseURL:"https://nirob-53167-default-rtdb.firebaseio.com"
+};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.database();
 
-let texts=JSON.parse(localStorage.getItem("texts"))||[
-"⚠️ Dear IMO team, abusive language is used in this room.",
-"❌ Illegal adult links are being shared.",
-"🔞 18+ content violates community rules.",
-"⚠️ Please suspend this voice room."
-];
-localStorage.setItem("texts",JSON.stringify(texts));
+// DOWNLOAD function
+function downloadFile(title,text){
+  const blob=new Blob([text],{type:"text/plain"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download=title.replace(/\s+/g,"_")+".txt";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 
-function render(){
-  container.innerHTML="";
-  texts.forEach((t,i)=>{
-    container.innerHTML+=`
-      <div class="textview" id="t${i}">${t}</div>
-      <button class="copy" onclick="copyText('t${i}')">📋 Copy</button>
+// COPY function
+function copyText(text){
+  const el=document.createElement("textarea");
+  el.value=text;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
+  alert("Copied ✅");
+}
+
+// Load data with newest on top
+db.ref("markets").on("value",snap=>{
+  const grid=document.getElementById("appGrid");
+  grid.innerHTML="";
+  let items=[];
+  snap.forEach(c=>{
+    const d=c.val();
+    d.key=c.key;
+    // যদি createdAt না থাকে, তৈরি করুন এখনই
+    if(!d.createdAt) d.createdAt=Date.now();
+    items.push(d);
+  });
+  
+  // Sort newest first (উপরে নতুন, নিচে পুরানো)
+  items.sort((a,b)=>b.createdAt - a.createdAt);
+
+  items.forEach(item=>{
+    grid.innerHTML+=`
+    <div class="app-card">
+      <div class="app-title">${item.name}</div>
+      <div class="caption-wrapper">
+        <span class="caption-label">${item.virus?"Virus":"Normal"}</span>
+        <div class="app-desc">${item.desc||""}</div>
+      </div>
+      <div class="btn-container">
+        <button class="download-btn" onclick="downloadFile('${item.name}','${(item.desc||"").replace(/'/g,"\\'")}')">
+          📥 DOWNLOAD
+        </button>
+        <button class="copy-btn" onclick="copyText('${(item.desc||"").replace(/'/g,"\\'")}')">
+          📋 COPY
+        </button>
+      </div>
+    </div>
     `;
   });
-}
-render();
-
-function copyText(id){
-  navigator.clipboard.writeText(document.getElementById(id).innerText);
-  toast.style.display="block";
-  setTimeout(()=>toast.style.display="none",1200);
-}
-
-let tap=0;
-title.onclick=()=>{
-  tap++;
-  if(tap>=5){
-    tap=0;
-    if(prompt("Admin Password")==="Nirob"){
-      admin.style.display="block";
-      renderAdmin();
-    }
-  }
-};
-
-function closeAdmin(){admin.style.display="none";}
-function saveTelegram(){
-  tgLink=tgInput.value;
-  localStorage.setItem("tgLink",tgLink);
-  tgBtn.href=tgLink;
-}
-
-function renderAdmin(){
-  list.innerHTML="";
-  texts.forEach((t,i)=>{
-    list.innerHTML+=`
-      <div class="item">${t}<br>
-      <button class="btn" onclick="delText(${i})">Delete</button></div>`;
-  });
-}
-function addText(){
-  if(newText.value){
-    texts.push(newText.value);
-    save();
-    newText.value="";
-  }
-}
-function delText(i){texts.splice(i,1);save();}
-function save(){
-  localStorage.setItem("texts",JSON.stringify(texts));
-  render();renderAdmin();
-}
+});
 </script>
-
 </body>
 </html>
