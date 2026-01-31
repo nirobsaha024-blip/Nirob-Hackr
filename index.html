@@ -94,8 +94,6 @@ header p{color:#94a3b8;margin-top:10px;}
   font-weight:bold;
   cursor:pointer;
 }
-
-/* Floating buttons */
 .floating-buttons{
   position:fixed;
   right:15px;
@@ -115,7 +113,6 @@ header p{color:#94a3b8;margin-top:10px;}
   text-decoration:none;
   box-shadow:0 6px 12px rgba(0,0,0,0.4);
 }
-/* Telegram button */
 .float-tg{
   background:#0088cc;
 }
@@ -123,7 +120,6 @@ header p{color:#94a3b8;margin-top:10px;}
   color:white;
   font-size:28px;
 }
-/* IMO button */
 .float-imo{
   background:white;
   color:black;
@@ -135,91 +131,100 @@ header p{color:#94a3b8;margin-top:10px;}
 <body>
 
 <header>
-<h1>🌟 NIROB HACKR 🌟</h1>
+<h1>😈 NIROB HACKR 😈</h1>
 <p>Premium Virus Panel</p>
 </header>
 
 <div class="app-list" id="appGrid"></div>
 
-<!-- Floating right side buttons -->
 <div class="floating-buttons">
-  <!-- Telegram -->
   <a href="https://t.me/+9bbmDogfC4hmMjc1" class="float-btn float-tg" target="_blank" title="Telegram">
     <i class="fa-brands fa-telegram"></i>
   </a>
-  <!-- IMO -->
   <a href="https://s.channelcom.tech/M9wq4g?from=copy_link" class="float-btn float-imo" target="_blank" title="IMO">
     IMO
   </a>
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-const firebaseConfig={
-  apiKey:"AIzaSyC3KLc2o9rVfvLNxMGR9KlT_TJBPje29Mw",
-  databaseURL:"https://nirob-53167-default-rtdb.firebaseio.com"
+const firebaseConfig = {
+  apiKey: "AIzaSyC3KLc2o9rVfvLNxMGR9KlT_TJBPje29Mw",
+  databaseURL: "https://nirob-53167-default-rtdb.firebaseio.com"
 };
 firebase.initializeApp(firebaseConfig);
-const db=firebase.database();
+const db = firebase.database();
 
-// DOWNLOAD function
-function downloadFile(title,text){
-  const blob=new Blob([text],{type:"text/plain"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=title.replace(/\s+/g,"_")+".txt";
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-// COPY function
+// Copy function (works on mobile & WebView)
 function copyText(text){
-  const el=document.createElement("textarea");
-  el.value=text;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand("copy");
-  document.body.removeChild(el);
-  alert("Copied ✅");
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>alert("Copied ✅"))
+    .catch(()=>fallbackCopy(text));
+  }else fallbackCopy(text);
+}
+function fallbackCopy(text){
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  try{
+    document.execCommand("copy");
+    alert("Copied ✅");
+  }catch(e){
+    alert("Copy failed ❌");
+  }
+  document.body.removeChild(textarea);
 }
 
-// Load data with newest on top
-db.ref("markets").on("value",snap=>{
-  const grid=document.getElementById("appGrid");
-  grid.innerHTML="";
+// Download function (mobile safe)
+function downloadFile(title,text){
+  const win = window.open("", "_blank");
+  win.document.write("<pre style='white-space:pre-wrap;font-family:monospace'>"+text.replace(/</g,"&lt;").replace(/>/g,"&gt;")+"</pre>");
+  win.document.title = title;
+}
+
+// Load data from Firebase
+db.ref("markets").on("value", snap=>{
+  const grid = document.getElementById("appGrid");
+  grid.innerHTML = "";
   let items=[];
   snap.forEach(c=>{
     const d=c.val();
-    d.key=c.key;
-    // যদি createdAt না থাকে, তৈরি করুন এখনই
     if(!d.createdAt) d.createdAt=Date.now();
     items.push(d);
   });
-  
-  // Sort newest first (উপরে নতুন, নিচে পুরানো)
-  items.sort((a,b)=>b.createdAt - a.createdAt);
+  items.sort((a,b)=>b.createdAt-a.createdAt);
 
   items.forEach(item=>{
-    grid.innerHTML+=`
-    <div class="app-card">
+    const card=document.createElement("div");
+    card.className="app-card";
+
+    card.innerHTML=`
       <div class="app-title">${item.name}</div>
       <div class="caption-wrapper">
         <span class="caption-label">${item.virus?"Virus":"Normal"}</span>
-        <div class="app-desc">${item.desc||""}</div>
+        <div class="app-desc"></div>
       </div>
       <div class="btn-container">
-        <button class="download-btn" onclick="downloadFile('${item.name}','${(item.desc||"").replace(/'/g,"\\'")}')">
-          📥 DOWNLOAD
-        </button>
-        <button class="copy-btn" onclick="copyText('${(item.desc||"").replace(/'/g,"\\'")}')">
-          📋 COPY
-        </button>
+        <button class="download-btn">📥 DOWNLOAD</button>
+        <button class="copy-btn">📋 COPY</button>
       </div>
-    </div>
     `;
+
+    card.querySelector(".app-desc").innerText = item.desc||"";
+
+    card.querySelector(".download-btn")
+      .onclick = ()=>downloadFile(item.name, item.desc||"");
+
+    card.querySelector(".copy-btn")
+      .onclick = ()=>copyText(item.desc||"");
+
+    grid.appendChild(card);
   });
 });
 </script>
